@@ -4,87 +4,17 @@
   <meta charset="UTF-8">
   <title>US Expenses in Iran Tracker</title>
   <style>
-    body {
-      background-color: #0d1117;
-      color: #f0f6fc;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 2rem;
-      margin: 0;
-      text-align: center;
-    }
-
-    #counter {
-      font-size: 3.5rem;
-      color: #ef4444;
-      margin-bottom: 0.2em;
-    }
-
-    #label {
-      font-size: 1.2rem;
-      color: #9ca3af;
-    }
-
-    #controls {
-      margin-top: 1.5rem;
-    }
-
-    button {
-      padding: 0.6rem 1.2rem;
-      margin: 0.3rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #1f2937;
-      color: #f9fafb;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    button:hover {
-      background-color: #374151;
-    }
-
-    #info {
-      margin-top: 2rem;
-      font-size: 1rem;
-      color: #d1d5db;
-    }
-
-    #about {
-      background-color: #1e293b;
-      color: #e2e8f0;
-      max-width: 800px;
-      text-align: left;
-      padding: 1.5rem;
-      margin-top: 3rem;
-      border-radius: 10px;
-      display: none;
-      line-height: 1.7;
-    }
-
-    #about h2 {
-      color: #facc15;
-    }
-
-    #about a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-
-    #about a:hover {
-      text-decoration: underline;
-    }
-
-    code {
-      background: #0f172a;
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
+    body { background:#0d1117; color:#f0f6fc; font-family:sans-serif;
+           display:flex; flex-direction:column; align-items:center;
+           justify-content:center; height:100vh; margin:0; text-align:center; }
+    #counter { font-size:4rem; color:#ef4444; }
+    #label { font-size:1.2rem; color:#9ca3af; margin-bottom:1rem; }
+    #controls button { padding:.6rem 1.2rem; margin:.3rem;
+      font-size:1rem; border:none; border-radius:8px;
+      background:#1f2937; color:#f9fafb; cursor:pointer;
+      transition:background .2s; }
+    #controls button:hover { background:#374151; }
+    #info { margin-top:1.5rem; font-size:1rem; color:#d1d5db; }
   </style>
 </head>
 <body>
@@ -94,7 +24,7 @@
 
   <div id="controls">
     <button onclick="toggleMode()">Toggle Mode: <span id="mode">Simulated</span></button>
-    <button onclick="toggleAbout()">About This</button>
+    <button onclick="location.href='about.html'">About This Tracker</button>
   </div>
 
   <div id="info">
@@ -102,91 +32,40 @@
     <div>⏳ Time Elapsed: <span id="elapsedTime">0s</span></div>
   </div>
 
-  <div id="about">
-    <h2>About This Tracker</h2>
-    <p>
-      This website shows a real-time simulation of U.S. military material costs in Iran, starting at <code>00:00 UTC on June 21, 2025</code>. It excludes personnel and logistics, focusing only on direct materials like bombs, missiles, aircraft flight hours, and refueling.
-    </p>
-
-    <h3>Cost Breakdown</h3>
-    <ul>
-      <li>6 × GBU-57 bombs @ ~$3.5M each → $21M</li>
-      <li>20 × Tomahawk missiles @ ~$2M each → $40M</li>
-      <li>B-2 bomber flight time: 40 hrs @ ~$135K/hr → $5.4M</li>
-      <li>Aerial refueling: 40 hrs @ ~$19.9K/hr → $0.8M</li>
-    </ul>
-
-    <p><strong>Total Estimated Material Cost:</strong> ~$67.2 million</p>
-
-    <h3>Per-Second Rate</h3>
-    <p>
-      Dividing $67.2M by 86,400 seconds in a day results in an estimated real-time rate of <strong>~$778/second</strong>.
-    </p>
-
-    <h3>Sources</h3>
-    <ul>
-      <li><a href="https://www.af.mil/News/Article-Display/Article/2805677/cost-per-flying-hour-updated-for-fy21/" target="_blank">U.S. Air Force – Cost per Flight Hour</a></li>
-      <li><a href="https://www.defensenews.com/land/2020/08/06/us-air-force-places-order-for-bunker-busting-bombs/" target="_blank">Defense News – GBU-57 Cost</a></li>
-      <li><a href="https://www.naval-technology.com/projects/tomahawk/" target="_blank">Naval Technology – Tomahawk Missile</a></li>
-      <li><a href="https://crsreports.congress.gov/product/pdf/IF/IF11928" target="_blank">CRS – Weapon System Costs</a></li>
-    </ul>
-  </div>
-
   <script>
     const initialCost = 103000000;
     const ratePerSecond = 778;
-    const warStartTimeUTC = new Date(Date.UTC(2025, 5, 21, 0, 0, 0)); // June 21, 2025
+    const warStartTime = new Date(Date.UTC(2025,5,21,0,0,0));
+    let isSim = true;
 
-    const counterElement = document.getElementById('counter');
-    const modeElement = document.getElementById('mode');
-    const utcElement = document.getElementById('utcTime');
-    const elapsedElement = document.getElementById('elapsedTime');
-    const aboutSection = document.getElementById('about');
+    const counterEl = document.getElementById('counter');
+    const modeEl = document.getElementById('mode');
+    const utcEl = document.getElementById('utcTime');
+    const elapsedEl = document.getElementById('elapsedTime');
 
-    let isSimulated = true;
-
-    function formatUSD(amount) {
-      return '$' + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    function fmtUSD(a){return '$'+a.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+    function fmtTime(s){
+      const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), secs=Math.floor(s%60);
+      return `${h}h ${m}m ${secs}s`;
     }
 
-    function formatTime(seconds) {
-      const hrs = Math.floor(seconds / 3600);
-      const mins = Math.floor((seconds % 3600) / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${hrs}h ${mins}m ${secs}s`;
-    }
-
-    function updateClock() {
-      const now = new Date();
-      utcElement.textContent = now.toUTCString().split(' ')[4];
-    }
-
-    function update() {
-      const nowUTC = new Date();
-      const elapsedSeconds = (nowUTC - warStartTimeUTC) / 1000;
-
-      let currentCost = initialCost;
-      if (isSimulated) {
-        currentCost += ratePerSecond * elapsedSeconds;
-      }
-
-      counterElement.textContent = formatUSD(currentCost);
-      elapsedElement.textContent = formatTime(elapsedSeconds);
-
-      updateClock();
+    function update(){
+      const now=new Date();
+      const elapsedSec=(now-warStartTime)/1000;
+      const cost = initialCost + (isSim? ratePerSecond * elapsedSec : 0);
+      counterEl.textContent = fmtUSD(cost);
+      utcEl.textContent = now.toUTCString().split(' ')[4];
+      elapsedEl.textContent = fmtTime(elapsedSec);
       requestAnimationFrame(update);
     }
 
-    function toggleMode() {
-      isSimulated = !isSimulated;
-      modeElement.textContent = isSimulated ? 'Simulated' : 'Confirmed Only';
-    }
-
-    function toggleAbout() {
-      aboutSection.style.display = aboutSection.style.display === 'none' ? 'block' : 'none';
+    function toggleMode(){
+      isSim = !isSim;
+      modeEl.textContent = isSim ? 'Simulated' : 'Confirmed Only';
     }
 
     update();
   </script>
+
 </body>
 </html>
