@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>US Expenses in Iran Tracker</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #f0f6fc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    #counter {
+      font-size: 3.5rem;
+      color: #ef4444;
+      margin-bottom: 0.2em;
+    }
+
+    #label {
+      font-size: 1.2rem;
+      color: #9ca3af;
+    }
+
+    #controls {
+      margin-top: 1.5rem;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      margin: 0.3rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #1f2937;
+      color: #f9fafb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #374151;
+    }
+
+    #info {
+      margin-top: 2rem;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    .bold {
+      font-weight: bold;
+      color: #fcd34d;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="counter">$103,000,000.00</div>
+  <div id="label">US Expenses in Iran (Live Tracker)</div>
+
+  <div id="controls">
+    <button onclick="toggleMode()">Toggle Mode: <span id="mode">Simulated</span></button>
+  </div>
+
+  <div id="info">
+    <div>🕒 UTC Time: <span id="utcTime">--:--:--</span></div>
+    <div>⏳ Time Elapsed: <span id="elapsedTime">0s</span></div>
+  </div>
+
+  <script>
+    const initialCost = 103000000;
+    const ratePerSecond = 1192;
+
+    // Change this to the real start of the war
+    const warStartTimeUTC = new Date(Date.UTC(2025, 5, 21, 0, 0, 0)); // June 21, 2025 at 00:00 UTC
+
+    const counterElement = document.getElementById('counter');
+    const modeElement = document.getElementById('mode');
+    const utcElement = document.getElementById('utcTime');
+    const elapsedElement = document.getElementById('elapsedTime');
+
+    let isSimulated = true;
+
+    function formatUSD(amount) {
+      return '$' + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatTime(seconds) {
+      const hrs = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${hrs}h ${mins}m ${secs}s`;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      utcElement.textContent = now.toUTCString().split(' ')[4];
+    }
+
+    function update() {
+      const nowUTC = new Date();
+      const elapsedSeconds = (nowUTC - warStartTimeUTC) / 1000;
+
+      // Update counter
+      let currentCost = initialCost;
+      if (isSimulated) {
+        currentCost += ratePerSecond * elapsedSeconds;
+      }
+
+      counterElement.textContent = formatUSD(currentCost);
+      elapsedElement.textContent = formatTime(elapsedSeconds);
+
+      updateClock();
+      requestAnimationFrame(update);
+    }
+
+    function toggleMode() {
+      isSimulated = !isSimulated;
+      modeElement.textContent = isSimulated ? 'Simulated' : 'Confirmed Only';
+    }
+
+    update();
+  </script>
+</body>
+</html>
