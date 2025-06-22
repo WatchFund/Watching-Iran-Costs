@@ -1,25 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>US Expenses in Iran Tracker</title>
   <style>
-    body { background:#0d1117; color:#f0f6fc; font-family:sans-serif;
-           display:flex; flex-direction:column; align-items:center;
-           justify-content:center; height:100vh; margin:0; text-align:center; }
-    #counter { font-size:4rem; color:#ef4444; }
-    #label { font-size:1.2rem; color:#9ca3af; margin-bottom:1rem; }
-    #controls button { padding:.6rem 1.2rem; margin:.3rem;
-      font-size:1rem; border:none; border-radius:8px;
-      background:#1f2937; color:#f9fafb; cursor:pointer;
-      transition:background .2s; }
-    #controls button:hover { background:#374151; }
-    #info { margin-top:1.5rem; font-size:1rem; color:#d1d5db; }
+    body {
+      background: #0d1117;
+      color: #f0f6fc;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 2rem;
+    }
+    #counter {
+      font-size: 4rem;
+      color: #ef4444;
+    }
+    #label {
+      font-size: 1.2rem;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+    }
+    #controls button {
+      padding: 0.6rem 1.2rem;
+      margin: 0.3rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #1f2937;
+      color: #f9fafb;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #controls button:hover {
+      background: #374151;
+    }
+    #info {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
   </style>
 </head>
 <body>
 
-  <div id="counter">$103,000,000.00</div>
+  <div id="counter">$128,600,000.00</div>
   <div id="label">US Expenses in Iran (Live Tracker)</div>
 
   <div id="controls">
@@ -33,39 +63,55 @@
   </div>
 
   <script>
-    const initialCost = 103000000;
-    const ratePerSecond = 778;
-    const warStartTime = new Date(Date.UTC(2025,5,21,0,0,0));
-    let isSim = true;
+    // Initial total material cost including confirmed weapons + other likely munitions
+    const initialCost = 128600000;
+
+    // Operating costs per second (excludes bunker-busters & Tomahawks)
+    const ratePerSecond = 366;
+
+    // Start time: June 21, 2025 UTC midnight
+    const warStartTime = new Date(Date.UTC(2025, 5, 21, 0, 0, 0));
+
+    let isSimulated = true;
 
     const counterEl = document.getElementById('counter');
     const modeEl = document.getElementById('mode');
     const utcEl = document.getElementById('utcTime');
     const elapsedEl = document.getElementById('elapsedTime');
 
-    function fmtUSD(a){return '$'+a.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
-    function fmtTime(s){
-      const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), secs=Math.floor(s%60);
-      return `${h}h ${m}m ${secs}s`;
+    function formatUSD(amount) {
+      return '$' + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    function update(){
-      const now=new Date();
-      const elapsedSec=(now-warStartTime)/1000;
-      const cost = initialCost + (isSim? ratePerSecond * elapsedSec : 0);
-      counterEl.textContent = fmtUSD(cost);
+    function formatTime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.floor(seconds % 60);
+      return `${h}h ${m}m ${s}s`;
+    }
+
+    function update() {
+      const now = new Date();
+      const elapsedSeconds = (now - warStartTime) / 1000;
+
+      let currentCost = initialCost;
+      if (isSimulated) {
+        currentCost += ratePerSecond * elapsedSeconds;
+      }
+
+      counterEl.textContent = formatUSD(currentCost);
       utcEl.textContent = now.toUTCString().split(' ')[4];
-      elapsedEl.textContent = fmtTime(elapsedSec);
+      elapsedEl.textContent = formatTime(elapsedSeconds);
+
       requestAnimationFrame(update);
     }
 
-    function toggleMode(){
-      isSim = !isSim;
-      modeEl.textContent = isSim ? 'Simulated' : 'Confirmed Only';
+    function toggleMode() {
+      isSimulated = !isSimulated;
+      modeEl.textContent = isSimulated ? 'Simulated' : 'Confirmed Only';
     }
 
     update();
   </script>
-
 </body>
 </html>
