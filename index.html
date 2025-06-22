@@ -11,8 +11,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
       margin: 0;
       text-align: center;
     }
@@ -54,9 +55,35 @@
       color: #d1d5db;
     }
 
-    .bold {
-      font-weight: bold;
-      color: #fcd34d;
+    #about {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      max-width: 800px;
+      text-align: left;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      border-radius: 10px;
+      display: none;
+      line-height: 1.7;
+    }
+
+    #about h2 {
+      color: #facc15;
+    }
+
+    #about a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    #about a:hover {
+      text-decoration: underline;
+    }
+
+    code {
+      background: #0f172a;
+      padding: 2px 5px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -67,6 +94,7 @@
 
   <div id="controls">
     <button onclick="toggleMode()">Toggle Mode: <span id="mode">Simulated</span></button>
+    <button onclick="toggleAbout()">About This</button>
   </div>
 
   <div id="info">
@@ -74,17 +102,46 @@
     <div>⏳ Time Elapsed: <span id="elapsedTime">0s</span></div>
   </div>
 
+  <div id="about">
+    <h2>About This Tracker</h2>
+    <p>
+      This website shows a real-time simulation of U.S. military material costs in Iran, starting at <code>00:00 UTC on June 21, 2025</code>. It excludes personnel and logistics, focusing only on direct materials like bombs, missiles, aircraft flight hours, and refueling.
+    </p>
+
+    <h3>Cost Breakdown</h3>
+    <ul>
+      <li>6 × GBU-57 bombs @ ~$3.5M each → $21M</li>
+      <li>20 × Tomahawk missiles @ ~$2M each → $40M</li>
+      <li>B-2 bomber flight time: 40 hrs @ ~$135K/hr → $5.4M</li>
+      <li>Aerial refueling: 40 hrs @ ~$19.9K/hr → $0.8M</li>
+    </ul>
+
+    <p><strong>Total Estimated Material Cost:</strong> ~$67.2 million</p>
+
+    <h3>Per-Second Rate</h3>
+    <p>
+      Dividing $67.2M by 86,400 seconds in a day results in an estimated real-time rate of <strong>~$778/second</strong>.
+    </p>
+
+    <h3>Sources</h3>
+    <ul>
+      <li><a href="https://www.af.mil/News/Article-Display/Article/2805677/cost-per-flying-hour-updated-for-fy21/" target="_blank">U.S. Air Force – Cost per Flight Hour</a></li>
+      <li><a href="https://www.defensenews.com/land/2020/08/06/us-air-force-places-order-for-bunker-busting-bombs/" target="_blank">Defense News – GBU-57 Cost</a></li>
+      <li><a href="https://www.naval-technology.com/projects/tomahawk/" target="_blank">Naval Technology – Tomahawk Missile</a></li>
+      <li><a href="https://crsreports.congress.gov/product/pdf/IF/IF11928" target="_blank">CRS – Weapon System Costs</a></li>
+    </ul>
+  </div>
+
   <script>
     const initialCost = 103000000;
-    const ratePerSecond = 1192;
-
-    // Change this to the real start of the war
-    const warStartTimeUTC = new Date(Date.UTC(2025, 5, 21, 0, 0, 0)); // June 21, 2025 at 00:00 UTC
+    const ratePerSecond = 778;
+    const warStartTimeUTC = new Date(Date.UTC(2025, 5, 21, 0, 0, 0)); // June 21, 2025
 
     const counterElement = document.getElementById('counter');
     const modeElement = document.getElementById('mode');
     const utcElement = document.getElementById('utcTime');
     const elapsedElement = document.getElementById('elapsedTime');
+    const aboutSection = document.getElementById('about');
 
     let isSimulated = true;
 
@@ -108,7 +165,6 @@
       const nowUTC = new Date();
       const elapsedSeconds = (nowUTC - warStartTimeUTC) / 1000;
 
-      // Update counter
       let currentCost = initialCost;
       if (isSimulated) {
         currentCost += ratePerSecond * elapsedSeconds;
@@ -124,6 +180,10 @@
     function toggleMode() {
       isSimulated = !isSimulated;
       modeElement.textContent = isSimulated ? 'Simulated' : 'Confirmed Only';
+    }
+
+    function toggleAbout() {
+      aboutSection.style.display = aboutSection.style.display === 'none' ? 'block' : 'none';
     }
 
     update();
