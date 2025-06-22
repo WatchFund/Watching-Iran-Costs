@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>About This Tracker</title>
   <style>
-    body { max-width:800px; margin:2rem auto; padding:1.5rem;
-           background:#0d1117; color:#f1f5f9;
-           font-family:sans-serif; line-height:1.6; }
-    h1,h2 { color:#eab308; }
-    a { color:#38bdf8; text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    ul { margin-left:1.2rem; }
-    code { background:#1e293b; padding:2px 4px; border-radius:4px; }
-    .footer { margin-top:2rem; font-size:.9rem; color:#94a3b8; }
+    body {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: #0d1117;
+      color: #f1f5f9;
+      font-family: sans-serif;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #eab308;
+    }
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      margin-left: 1.2rem;
+    }
+    code {
+      background: #1e293b;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
   </style>
 </head>
 <body>
@@ -20,31 +43,50 @@
   <h1>About This Tracker</h1>
 
   <p>
-    This tracker displays a real-time simulation of U.S. <strong>material costs</strong> following the June 21, 2025 airstrikes on Iran. It excludes indirect costs (e.g., manpower, logistics) and focuses solely on weapons, aircraft, and fuel.
+    This tracker simulates the <strong>material costs</strong> of the June 21, 2025 U.S. airstrikes on Iran, starting at <code>00:00 UTC</code>. It focuses on direct hardware costs only — no personnel, logistics, or indirect expenses.
   </p>
 
-  <h2>Material Cost Breakdown</h2>
+  <h2>Confirmed Weapons and Aircraft</h2>
   <ul>
-    <li>6 × GBU‑57 bunker busters (~$3.5M each) → $21M</li>
-    <li>20 × Tomahawk missiles (~$2M each) → $40M</li>
-    <li>B‑2 bomber flight time (40 hrs @ $135K/hr) → $5.4M</li>
-    <li>Aerial refueling (40 hrs @ $19.9K/hr) → $0.8M</li>
+    <li>14 × GBU-57 bunker-busters (~$3.5 million each) → $49 million</li>
+    <li>24 × Tomahawk missiles (~$2 million each) → $48 million</li>
+    <li>B-2 bomber flight time (~7 bombers × 18 hrs × $135,000/hr) → $17.01 million</li>
+    <li>KC-135 aerial refueling (~40 hrs × $19,900/hr) → $0.8 million</li>
   </ul>
 
-  <p><strong>Total estimated material cost:</strong> ~$67.2 million</p>
+  <h2>Other Likely Munitions (Conservative Estimate)</h2>
+  <ul>
+    <li>40 × JDAM guided bombs (~$25,000 each) → $1 million</li>
+    <li>4 × AGM-158 JASSM missiles (~$1.5 million each) → $6 million</li>
+    <li>20 × Small Diameter Bombs (~$40,000 each) → $0.8 million</li>
+    <li>Electronic warfare drones/systems (2 units) → $4 million</li>
+    <li>Defensive interceptor missiles (2 units) → $2 million</li>
+  </ul>
 
-  <h2>Per-Second Rate</h2>
+  <p><strong>Total estimated initial material cost:</strong> ~$128.6 million</p>
+
+  <h2>Operating Costs (Used for Ongoing Per-Second Rate)</h2>
   <p>
-    Spread across a 24-hour day (86,400 s), this yields an estimated burn rate of <strong>~$778 per second</strong>.
+    For the <em>live running counter</em>, only daily operating costs and ordnance likely to be consumed regularly are counted, excluding expensive one-time bunker-buster bombs and Tomahawk missiles. These include:
+  </p>
+  <ul>
+    <li>B-2 bomber flight hours</li>
+    <li>KC-135 aerial refueling</li>
+    <li>Smaller precision weapons like JDAMs, SDBs, and JASSMs</li>
+    <li>Electronic warfare and defensive missile systems</li>
+  </ul>
+  <p>
+    This yields an estimated ongoing cost of about <strong>$31.61 million per day</strong>, which converts to roughly <strong>$366 per second</strong>.
   </p>
 
   <div class="footer">
-    <p><strong>Sources:</strong></p>
+    <h3>Sources</h3>
     <ul>
-      <li>GBU‑57 cost & first deployment info – Wikipedia, BBC </li>
-      <li>Tomahawk unit cost ~ $2M – U.S. Navy budget data, Marine Corps estimate </li>
-      <li>B‑2 flight-hour cost $135,000/hr – AF.mil fact sheet, Reddit confirmation </li>
-      <li>KC‑135 refueling cost $19.9K/hr – AF.mil reference </li>
+      <li><a href="https://www.axios.com/2025/06/22/iran-nuclear-midnight-hammer-bunker-buster" target="_blank" rel="noopener noreferrer">Axios: Midnight Hammer Strike Details</a></li>
+      <li><a href="https://www.defensenews.com/land/2020/08/06/us-air-force-places-order-for-bunker-busting-bombs/" target="_blank" rel="noopener noreferrer">Defense News: GBU-57 Cost</a></li>
+      <li><a href="https://www.naval-technology.com/projects/tomahawk/" target="_blank" rel="noopener noreferrer">Naval Technology: Tomahawk Missile</a></li>
+      <li><a href="https://www.af.mil/News/Article-Display/Article/2805677/cost-per-flying-hour-updated-for-fy21/" target="_blank" rel="noopener noreferrer">U.S. Air Force: Flight Hour Costs</a></li>
+      <li><a href="https://crsreports.congress.gov/product/pdf/IF/IF11928" target="_blank" rel="noopener noreferrer">Congressional Research Service: Weapon System Costs</a></li>
     </ul>
   </div>
 
